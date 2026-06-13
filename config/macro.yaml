@@ -1,0 +1,29 @@
+# The macro exposure dial. Updated by the weekly research run (with sources cited
+# in the matching journal entry). Each indicator is scored -1 (risk-off), 0, or +1
+# (risk-on). agent/macro_dial.py maps the sum to an exposure level and deployment band.
+
+as_of: "2026-06-12"
+
+indicators:
+  inflation_trend:
+    score: -1
+    note: "June CPI came in hot; re-acceleration risk"
+  fed_policy:
+    score: 0
+    note: "Direction unclear pending inflation data"
+  rates_10y:
+    score: 0
+    note: "TODO: set in first weekly research run"
+  geopolitical:
+    score: -1
+    note: "Iran war — unclear if ending; oil/risk premium possible"
+  ai_capex_cycle:
+    score: 1
+    note: "Buildout thesis intact: hyperscaler capex, power deals, agentic workloads"
+  market_technicals:
+    score: 0
+    note: "TODO: breadth/VIX read in first weekly research run"
+
+# Computed by agent/macro_dial.py from the table in docs/STRATEGY.md:
+#   <= -3: LOW (0-25%) | -2..0: LOW-MEDIUM (25-45%) | 1..3: MEDIUM (45-70%) | >= 4: HIGH (70-90%)
+# Current sum: -1  ->  LOW-MEDIUM  ->  deploy 25-45% of liquid capital

@@ -1,0 +1,67 @@
+# Thesis buckets + per-ticker alert triggers, evaluated daily by agent/daily_check.py.
+#
+# Trigger semantics (any may be null = not armed):
+#   buy_below:        alert when last price <= this absolute level
+#   trim_above:       alert when last price >= this absolute level
+#   buy_on_pullback_pct: alert when price is at least this % below its 52-week high
+#
+# Absolute levels (buy_below / trim_above) are set/refreshed by the weekly research
+# run, since they go stale fast. The pullback rule works without maintenance.
+
+global_rules:
+  default_buy_on_pullback_pct: 15      # flag entries 15%+ off 52w highs
+  option_roll_review_days: 270         # flag held options with <9 months to expiry
+  option_profit_take_pct: 100          # flag held options up 100%+
+
+buckets:
+  hyperscalers:
+    thesis: "AI capex anchors; AWS/Trainium is the core bet"
+    tickers:
+      - {ticker: AMZN, held: true,  buy_below: null, trim_above: null, buy_on_pullback_pct: 12}
+      - {ticker: MSFT, held: false, buy_below: null, trim_above: null, buy_on_pullback_pct: 15}
+      - {ticker: GOOGL, held: false, buy_below: null, trim_above: null, buy_on_pullback_pct: 15}
+      - {ticker: ORCL, held: false, buy_below: null, trim_above: null, buy_on_pullback_pct: 18}
+
+  neoclouds:
+    thesis: "GPU-native clouds; high beta, customer-concentration risk; bucket cap 20% NAV (incl. spec nuclear)"
+    tickers:
+      - {ticker: CRWV, held: false, buy_below: null, trim_above: null, buy_on_pullback_pct: 25}
+      - {ticker: NBIS, held: false, buy_below: null, trim_above: null, buy_on_pullback_pct: 25}
+      - {ticker: IREN, held: false, buy_below: null, trim_above: null, buy_on_pullback_pct: 25}
+      - {ticker: APLD, held: false, buy_below: null, trim_above: null, buy_on_pullback_pct: 25}
+
+  compute_supply_chain:
+    thesis: "Chips, networking, power/cooling for the buildout"
+    tickers:
+      - {ticker: NVDA, held: false, buy_below: null, trim_above: null, buy_on_pullback_pct: 15}
+      - {ticker: AVGO, held: false, buy_below: null, trim_above: null, buy_on_pullback_pct: 15}
+      - {ticker: TSM,  held: false, buy_below: null, trim_above: null, buy_on_pullback_pct: 15}
+      - {ticker: MU,   held: false, buy_below: null, trim_above: null, buy_on_pullback_pct: 20}
+      - {ticker: VRT,  held: false, buy_below: null, trim_above: null, buy_on_pullback_pct: 18}
+
+  energy:
+    thesis: "Power is the bottleneck. Prefer IPPs HQ'd/operating in low-regulation red states (TX first)."
+    tickers:
+      - {ticker: VST,  held: false, buy_below: null, trim_above: null, buy_on_pullback_pct: 15,
+         note: "Irving TX; ERCOT-heavy; nuclear via Comanche Peak"}
+      - {ticker: NRG,  held: false, buy_below: null, trim_above: null, buy_on_pullback_pct: 15,
+         note: "Houston TX"}
+      - {ticker: TLN,  held: false, buy_below: null, trim_above: null, buy_on_pullback_pct: 15,
+         note: "Houston TX HQ but key Susquehanna nuclear + AWS campus is in PA — flagged per strategy"}
+      - {ticker: OKLO, held: false, buy_below: null, trim_above: null, buy_on_pullback_pct: 30,
+         note: "Speculative SMR; small size only"}
+
+  data_platforms:
+    thesis: "Data/analytics platforms riding AI workload growth"
+    tickers:
+      - {ticker: SNOW, held: true, buy_below: null, trim_above: null, buy_on_pullback_pct: 15}
+
+  space:
+    thesis: "Orbital data centers + launch monopoly, expressed via SpaceX post-IPO"
+    tickers: []   # SpaceX not yet listed/confirmed; weekly research tracks IPO status.
+    watch_private:
+      - name: SpaceX
+        entry_rules:
+          - "no entry at IPO or in first euphoria phase"
+          - ">=20% pullback from post-IPO closing high, OR first lockup expiry, OR LOW-dial market flush"
+          - "initial size: one 10% NAV tranche, common stock (IPO option chains are thin)"

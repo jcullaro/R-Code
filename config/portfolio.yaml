@@ -1,0 +1,45 @@
+# Source of truth for current holdings. Update after every trade.
+# TODO: replace approximate entries with exact contracts from Robinhood
+# (strike, expiry, contract count, cost basis). Until the Robinhood API is
+# connected, this file is maintained by hand / by the weekly research session.
+
+as_of: "2026-06-12"
+account_value_usd: 150000   # approximate; reconcile against Robinhood
+
+cash:
+  liquid_usd: 100000
+
+options:
+  - ticker: SNOW
+    description: "Snowflake LEAPS"
+    type: call
+    strike: null          # TODO from Robinhood
+    expiry: "2027-06-18"  # approximate ("~1 year out"); confirm exact date
+    contracts: null
+    cost_basis_usd: 15000     # implied by ~+100% on ~$30k current value
+    current_value_usd: 30000
+    pnl_pct: 100
+    notes: >
+      Up ~100% — profit-taking rule (STRATEGY.md) is live: trim or roll up to
+      recover initial premium, let the rest ride.
+
+  - ticker: AMZN
+    description: "Amazon long-dated calls"
+    type: call
+    strike: null          # TODO from Robinhood
+    expiry: null          # TODO — check against the <9-month roll trigger
+    contracts: null
+    cost_basis_usd: 29000     # implied by ~+20% on ~$35k current value
+    current_value_usd: 35000
+    pnl_pct: 20
+    notes: "Core hyperscaler/Trainium position. Hold."
+
+stock: []
+
+# Exposure held outside this account, tracked for correlation only.
+external_exposure:
+  - name: "Anthropic (spouse equity)"
+    note: >
+      Do not add pure-play LLM-lab exposure. AMZN carries embedded Anthropic
+      exposure (investor + Trainium customer) — count AMZN+Anthropic as one
+      correlated bet against the 25% concentration cap.
