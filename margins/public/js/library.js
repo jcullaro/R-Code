@@ -144,7 +144,8 @@ document.getElementById('pdf-form').addEventListener('submit', async (e) => {
   try {
     await api('/api/items/upload', { method: 'POST', body: fd });
     document.querySelector('.toast')?.remove();
-    toast('PDF saved ✓');
+    toast('Saved ✓');
+    document.getElementById('pdf-input').value = '';
     load();
   } catch (err) {
     document.querySelector('.toast')?.remove();

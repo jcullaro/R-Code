@@ -119,18 +119,36 @@ app.get('/clip', checkAuth, async (req, res) => {
   }
 });
 
-// PDF upload from the web app.
-app.post('/api/items/upload', checkAuth, upload.single('file'), (req, res) => {
+// File upload from the web app: PDFs, or HTML files saved to disk.
+app.post('/api/items/upload', checkAuth, upload.single('file'), async (req, res) => {
   if (!req.file) return res.status(400).json({ error: 'file required' });
-  if (!/pdf$/i.test(req.file.mimetype) && !/\.pdf$/i.test(req.file.originalname)) {
-    return res.status(400).json({ error: 'only PDF files are supported' });
+  const name = req.file.originalname || '';
+  const isPdf = /pdf$/i.test(req.file.mimetype) || /\.pdf$/i.test(name);
+  const isHtml = /^text\/html$/i.test(req.file.mimetype) || /\.x?html?$/i.test(name);
+  try {
+    if (isPdf) {
+      const id = savePdfItem({
+        buffer: req.file.buffer,
+        title: req.body.title,
+        fileName: name,
+      });
+      return res.json({ id, ok: true });
+    }
+    if (isHtml) {
+      // Sanitize/inline through the same pipeline as clipped pages. Relative
+      // asset references can't be resolved for a local file, so they're
+      // dropped; absolute ones are inlined as usual.
+      const snap = await snapshotHtml(req.file.buffer.toString('utf8'), req.body.url || 'file:///upload/');
+      const fallback = name.replace(/\.x?html?$/i, '');
+      if (req.body.title) snap.meta.title = String(req.body.title).slice(0, 500);
+      else if (!snap.meta.title || snap.meta.title === 'file:///upload/') snap.meta.title = fallback || 'Untitled';
+      const id = saveHtmlItem({ html: snap.html, meta: snap.meta, url: req.body.url || null });
+      return res.json({ id, ok: true });
+    }
+    res.status(400).json({ error: 'only PDF and HTML files are supported' });
+  } catch (err) {
+    res.status(500).json({ error: `Could not save file: ${err.message}` });
   }
-  const id = savePdfItem({
-    buffer: req.file.buffer,
-    title: req.body.title,
-    fileName: req.file.originalname,
-  });
-  res.json({ id, ok: true });
 });
 
 // PWA share target (Android "share to app"): accepts a shared URL/text or PDFs.
