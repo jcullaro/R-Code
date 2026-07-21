@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Margins — Reader</title>
+  <link rel="stylesheet" href="/css/app.css">
+  <link rel="icon" href="/icons/icon.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#b5502a">
+</head>
+<body class="reader-body">
+  <header class="reader-top">
+    <button class="icon-btn" id="back-btn" title="Back to library">←</button>
+    <div class="title" id="doc-title">Loading…</div>
+    <button class="icon-btn" id="tts-btn" title="Listen (read aloud)">🎧</button>
+    <button class="icon-btn" id="panel-btn" title="Highlights">✎</button>
+    <a class="icon-btn" id="orig-link" title="Open original" target="_blank" rel="noopener" style="display:none">↗</a>
+  </header>
+
+  <main class="reader-main">
+    <div class="content-pane" id="content-pane"></div>
+
+    <aside class="hl-panel hidden" id="hl-panel">
+      <h2>Highlights</h2>
+      <div id="hl-list"></div>
+    </aside>
+  </main>
+
+  <div class="tts-bar" id="tts-bar">
+    <button class="tts-play" id="tts-play">▶</button>
+    <button class="icon-btn" id="tts-prev" title="Previous sentence">⏮</button>
+    <button class="icon-btn" id="tts-next" title="Next sentence">⏭</button>
+    <div class="tts-sentence" id="tts-sentence">Press play to listen to this article.</div>
+    <input type="range" class="tts-rate" id="tts-rate" min="0.6" max="2" step="0.1" value="1" title="Speed">
+    <span id="tts-rate-label" style="font-size:12px;color:var(--ink-soft)">1×</span>
+    <select id="tts-voice" title="Voice"></select>
+    <button class="icon-btn" id="tts-close" title="Close">✕</button>
+  </div>
+
+  <div class="hl-toolbar hidden" id="hl-toolbar">
+    <button class="swatch" data-color="yellow" style="background:var(--hl-yellow)" title="Yellow"></button>
+    <button class="swatch" data-color="green" style="background:var(--hl-green)" title="Green"></button>
+    <button class="swatch" data-color="blue" style="background:var(--hl-blue)" title="Blue"></button>
+    <button class="swatch" data-color="pink" style="background:var(--hl-pink)" title="Pink"></button>
+    <button class="swatch" data-color="orange" style="background:var(--hl-orange)" title="Orange"></button>
+    <button class="note-btn" id="hl-note-btn" title="Highlight with note">✎ note</button>
+  </div>
+
+  <script type="module" src="/js/reader.js"></script>
+</body>
+</html>
